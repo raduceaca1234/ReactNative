@@ -18,6 +18,7 @@ const NewPlaceScreen = props => {
   const [titleValue, setTitleValue] = useState('');
   const [selectedImage, setSelectedImage] = useState();
   const [selectedLocation, setSelectedLocation] = useState();
+
   const dispatch = useDispatch();
 
   const titleChangeHandler = text => {
@@ -25,18 +26,18 @@ const NewPlaceScreen = props => {
     setTitleValue(text);
   };
 
+  const imageTakenHandler = imagePath => {
+    setSelectedImage(imagePath);
+  };
+
+  const locationPickedHandler = useCallback(location => {
+    setSelectedLocation(location);
+  }, []);
+
   const savePlaceHandler = () => {
     dispatch(placesActions.addPlace(titleValue, selectedImage, selectedLocation));
     props.navigation.goBack();
   };
-
-  const imageTakenHandler = imagePath => {
-    setSelectedImage(imagePath);
-  }
-
-  const locationPickerHandler = useCallback(location => {
-    setSelectedLocation(location);
-  },[])
 
   return (
     <ScrollView>
@@ -50,7 +51,7 @@ const NewPlaceScreen = props => {
         <ImagePicker onImageTaken={imageTakenHandler} />
         <LocationPicker
           navigation={props.navigation}
-          onLocationPicked={locationPickerHandler}
+          onLocationPicked={locationPickedHandler}
         />
         <Button
           title="Save Place"
